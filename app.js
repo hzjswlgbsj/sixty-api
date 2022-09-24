@@ -1,41 +1,49 @@
-'use strict'
-
 const Koa = require('koa')
-const bodyParser = require('koa-bodyparser')()
-const staticCache = require('koa-static-cache')
-const cors = require('koa2-cors')
-const helmet = require("koa-helmet")
+const InitManager = require('./core/init')
+const parser = require('koa-bodyparser')
+const cors = require('@koa/cors');
+const ratelimit = require('koa-ratelimit');
 
-const config = require('./config')
-const publicRouter = require('./routes/public')
-const privateRouter = require('./routes/private')
-const { loggerMiddleware } = require('./middlewares/logger')
-const { errorHandler, responseHandler } = require('./middlewares/response')
-const { corsHandler } = require('./middlewares/cors')
+require('module-alias/register')
+
+
+const catchError = require('./middlewares/exception')
 
 const app = new Koa()
-// console.log(process.env.NODE_ENV)
-// Logger
-app.use(loggerMiddleware)
 
-// Error Handler
-app.use(errorHandler)
+app.use(cors())
+app.use(catchError)
+app.use(parser())
 
-// Global Middlewares
-app.use(bodyParser)
-app.use(staticCache(config.publicDir))
+// 接口调用频率限制（Rate-Limiting）
+// Rate limiter middleware for koa.
+// https://github.com/koajs/ratelimit
+const db = new Map();
+app.use(ratelimit({
+  driver: 'memory',
+  db: db,
+  duration: 60000,
+  errorMessage: 'Sometimes You Just Have to Slow Down.',
+  id: (ctx) => ctx.ip,
+  headers: {
+    remaining: 'Rate-Limit-Remaining',
+    reset: 'Rate-Limit-Reset',
+    total: 'Rate-Limit-Total'
+  },
+  max: 100,
+  disableHeader: false,
+  whitelist: (ctx) => {
+    // some logic that returns a boolean
+  },
+  blacklist: (ctx) => {
+    // some logic that returns a boolean
+  }
+}));
 
-// Helmet
-app.use(helmet())
+InitManager.initCore(app)
 
-// Cors
-app.use(cors(corsHandler))
-
-// Routes
-app.use(publicRouter.routes(), publicRouter.allowedMethods())
-app.use(privateRouter.routes(), privateRouter.allowedMethods())
-
-// Response
-app.use(responseHandler)
+app.listen(8888, () => {
+  console.log('Koa is listening in http://localhost:8888')
+})
 
 module.exports = app

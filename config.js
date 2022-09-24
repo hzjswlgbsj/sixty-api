@@ -1,17 +1,15 @@
-'use strict'
-
-const path = require('path')
-
 module.exports = {
-  port: '3001',
-  secret: 'secret',
-  publicDir: path.resolve(__dirname, './public'),
-  logPath: path.resolve(__dirname, './logs/koa-template.log'),
-  mongoDB: {
-    database: 'mall',
-    username: 'root',
-    password: 'root',
-    host: '127.0.0.1',
-    port: 27017
+  environment: 'dev',
+  database: {
+    dbName: 'boblog',
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: '123456789'
+  },
+  security: {
+    secretKey: "secretKey",
+    // 过期时间 1小时
+    expiresIn: 60 * 60 * 24
   }
 }
