@@ -1,10 +1,10 @@
 const { Op } = require('sequelize')
 
-const { Article } = require('@models/article')
-const { Category } = require('@models/category')
-const { Comment } = require('@models/comment')
-const { Admin } = require('@models/admin')
-const { isArray, unique } = require('@lib/utils')
+const { Article } = require('../models/article')
+const { Category } = require('../models/category')
+const { Comment } = require('../models/comment')
+const { Admin } = require('../models/admin')
+const { isArray, unique } = require('../lib/utils')
 
 // 定义文章模型
 class ArticleDao {

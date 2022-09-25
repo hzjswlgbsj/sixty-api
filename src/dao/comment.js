@@ -1,11 +1,11 @@
 const xss = require('xss')
 
-const { Comment } = require('@models/comment')
-const { Article } = require('@models/article')
-const { User } = require('@models/user')
-const { Reply } = require('@models/reply')
-const { isArray, unique } = require('@lib/utils')
-// const {sequelize} = require('@core/db')
+const { Comment } = require('../models/comment')
+const { Article } = require('../models/article')
+const { User } = require('../models/user')
+const { Reply } = require('../models/reply')
+const { isArray, unique } = require('../lib/utils')
+// const {sequelize} = require('../../core/db')
 const { Sequelize, Op } = require('sequelize')
 
 class CommentDao {

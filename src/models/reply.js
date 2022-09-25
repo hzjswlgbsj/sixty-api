@@ -1,8 +1,8 @@
 const moment = require('moment');
 
 const { DataTypes, Model } = require('sequelize')
-const { sequelize } = require('@core/db')
-// const { Comment } = require('@models/comment')
+const { sequelize } = require('../../core/db')
+// const { Comment } = require('../models/comment')
 
 class Reply extends Model {
 

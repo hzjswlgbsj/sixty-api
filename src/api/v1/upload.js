@@ -3,10 +3,10 @@ const ACCESS_KEY = 'UxXRnLJnRsC3AaEII661ZgPOtmcFeaXigeKbc85O';
 const SECRET_KEY = '_5m492oDojUEH-hPt02JDFNmbU2VCpMZU8UY_inv';
 const mac = new qiniu.auth.digest.Mac(ACCESS_KEY, SECRET_KEY);
 
-const { Auth } = require('@middlewares/auth');
+const { Auth } = require('../../../middlewares/auth');
 const AUTH_ADMIN = 16;
 
-const { Resolve } = require('@lib/helper');
+const { Resolve } = require('../../lib/helper');
 const res = new Resolve();
 
 const Router = require('koa-router')

@@ -13,7 +13,7 @@ class InitManager {
   // 加载全部路由
   static initLoadRouters() {
     // 绝对路径
-    const apiDirectory = `${process.cwd()}/app/api`
+    const apiDirectory = `${process.cwd()}/src/api`
     // 路由自动加载
     requireDirectory(module, apiDirectory, {
       visit: whenLoadModule
@@ -28,7 +28,7 @@ class InitManager {
   }
 
   static loadConfig(path = '') {
-    const configPath = path || process.cwd() + '/config/config.js'
+    const configPath = path || process.cwd() + '/config.js'
     const config = require(configPath)
     global.config = config
   }

@@ -1,9 +1,9 @@
 const xss = require('xss')
-const { Reply } = require('@models/reply')
-const { User } = require('@models/user')
-const { Comment } = require('@models/comment')
-const { Article } = require('@models/article')
-const { extractQuery, isArray, unique } = require('@lib/utils')
+const { Reply } = require('../models/reply')
+const { User } = require('../models/user')
+const { Comment } = require('../models/comment')
+const { Article } = require('../models/article')
+const { extractQuery, isArray, unique } = require('../lib/utils')
 const { Op } = require('sequelize')
 
 class ReplyDao {

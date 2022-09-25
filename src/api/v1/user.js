@@ -9,12 +9,12 @@ const {
     RegisterValidator,
     PositiveIdParamsValidator,
     UserLoginValidator
-} = require('@validators/user')
+} = require('../../validators/user')
 
-const { UserDao } = require('@dao/user');
-const { Auth } = require('@middlewares/auth');
-const { LoginManager } = require('@service/login');
-const { Resolve } = require('@lib/helper');
+const { UserDao } = require('../../dao/user');
+const { Auth } = require('../../../middlewares/auth');
+const { LoginManager } = require('../../service/login');
+const { Resolve } = require('../../lib/helper');
 const res = new Resolve();
 
 const AUTH_USER = 8;
