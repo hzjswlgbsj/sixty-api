@@ -8,7 +8,7 @@ const { isArray, unique } = require('../lib/utils')
 // const {sequelize} = require('../../core/db')
 const { Sequelize, Op } = require('sequelize')
 
-class CommentDao {
+class CommentController {
   // 创建评论
   static async create(v) {
     const comment = new Comment();
@@ -66,17 +66,17 @@ class CommentDao {
 
       // 查询评论
       if (parseInt(is_replay, 10) === 1) {
-        comment = await CommentDao._handleReply(comment)
+        comment = await CommentController._handleReply(comment)
       }
 
       // 查询文章
       if (parseInt(is_article, 10) === 1) {
-        comment = await CommentDao._handleArticle(comment)
+        comment = await CommentController._handleArticle(comment)
       }
 
       // 查询用户
       if (parseInt(is_user, 10) === 1) {
-        comment = await CommentDao._handleUser(comment)
+        comment = await CommentController._handleUser(comment)
       }
 
       return [null, comment]
@@ -168,17 +168,17 @@ class CommentDao {
 
       // 查询评论
       if (parseInt(is_replay, 10) === 1) {
-        rows = await CommentDao._handleReply(rows)
+        rows = await CommentController._handleReply(rows)
       }
 
       // 查询文章
       if (parseInt(is_article, 10) === 1) {
-        rows = await CommentDao._handleArticle(rows)
+        rows = await CommentController._handleArticle(rows)
       }
 
       // 查询用户
       if (parseInt(is_user, 10) === 1) {
-        rows = await CommentDao._handleUser(rows)
+        rows = await CommentController._handleUser(rows)
       }
 
       const data = {
@@ -250,17 +250,17 @@ class CommentDao {
       let rows = comment.rows
       // 查询评论
       if (parseInt(is_replay, 10) === 1) {
-        rows = await CommentDao._handleReply(rows)
+        rows = await CommentController._handleReply(rows)
       }
 
       // 查询文章
       if (parseInt(is_article, 10) === 1) {
-        rows = await CommentDao._handleArticle(rows)
+        rows = await CommentController._handleArticle(rows)
       }
 
       // 用户
       if (parseInt(is_user, 10) === 1) {
-        rows = await CommentDao._handleUser(rows)
+        rows = await CommentController._handleUser(rows)
       }
 
       const data = {
@@ -461,7 +461,7 @@ class CommentDao {
     try {
       const isArrayData = isArray(comment)
       const commentIds = isArrayData ? unique(comment.map(c => c.id)) : comment.id
-      const [replyErr, replyData] = await CommentDao.getReplyData(commentIds)
+      const [replyErr, replyData] = await CommentController.getReplyData(commentIds)
 
       if (!replyErr) {
         const userIds = [];
@@ -481,12 +481,12 @@ class CommentDao {
 
         newUserIds = unique(userIds).filter(v => v !== 0)
 
-        const [userErr1, userData1] = await CommentDao.getUserData(newUserIds)
+        const [userErr1, userData1] = await CommentController.getUserData(newUserIds)
         if (!userErr1) {
-          CommentDao._handleReplyUserInfo(replyData, userData1)
+          CommentController._handleReplyUserInfo(replyData, userData1)
         }
 
-        return CommentDao._setCommentByDataValue(comment, replyData, 'id', 'reply_list')
+        return CommentController._setCommentByDataValue(comment, replyData, 'id', 'reply_list')
       } else {
         throw new global.errs.Existing(JSON.stringify(replyErr));
       }
@@ -536,10 +536,10 @@ class CommentDao {
     const articleIds = isArrayData ? unique(comment.map(c => c.article_id)) : comment.article_id
 
     // 进行查询
-    const [articleErr, articleData] = await CommentDao.getArticleData(articleIds)
+    const [articleErr, articleData] = await CommentController.getArticleData(articleIds)
 
     if (!articleErr) {
-      return CommentDao._setCommentByDataValue(comment, articleData, 'article_id', 'article')
+      return CommentController._setCommentByDataValue(comment, articleData, 'article_id', 'article')
     } else {
       throw new global.errs.Existing(JSON.stringify(articleErr));
     }
@@ -560,10 +560,10 @@ class CommentDao {
       : comment.user_id
 
     // 进行查询
-    const [userErr, userData] = await CommentDao.getUserData(userIds)
+    const [userErr, userData] = await CommentController.getUserData(userIds)
 
     if (!userErr) {
-      return CommentDao._setCommentByDataValue(comment, userData, 'user_id', 'user_info')
+      return CommentController._setCommentByDataValue(comment, userData, 'user_id', 'user_info')
 
     } else {
       throw new global.errs.Existing(JSON.stringify(userErr));
@@ -572,5 +572,5 @@ class CommentDao {
 }
 
 module.exports = {
-  CommentDao
+  CommentController
 }

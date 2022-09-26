@@ -1,13 +1,7 @@
-/**
- * @description 管理员的数据访问对象
- * @description Data Access Objects for Administrators
- * @author 梁凤波, Peter Liang
- */
-
 const { Admin } = require('../models/admin')
 const bcrypt = require('bcryptjs')
 
-class AdminDao {
+class AdminController {
   // 创建用管理员
   static async create(params) {
     const { email, password, nickname } = params
@@ -93,5 +87,5 @@ class AdminDao {
 }
 
 module.exports = {
-  AdminDao
+  AdminController
 }

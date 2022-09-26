@@ -6,7 +6,7 @@ const { Article } = require('../models/article')
 const { extractQuery, isArray, unique } = require('../lib/utils')
 const { Op } = require('sequelize')
 
-class ReplyDao {
+class ReplyController {
   // 创建回复
   static async create(v) {
     // 查询评论
@@ -113,10 +113,10 @@ class ReplyDao {
     const articleIds = isArrayData ? unique(reply.map(c => c.article_id)) : reply.article_id
 
     // 进行查询
-    const [articleErr, articleData] = await ReplyDao.getArticleData(articleIds)
+    const [articleErr, articleData] = await ReplyController.getArticleData(articleIds)
 
     if (!articleErr) {
-      return ReplyDao.setReplyByDataValue(reply, articleData, 'article_id', 'article')
+      return ReplyController.setReplyByDataValue(reply, articleData, 'article_id', 'article')
     } else {
       throw new global.errs.Existing(JSON.stringify(articleErr));
     }
@@ -137,10 +137,10 @@ class ReplyDao {
       : reply.user_id
 
     // 进行查询
-    const [userErr, userData] = await ReplyDao.getUserData(userIds)
+    const [userErr, userData] = await ReplyController.getUserData(userIds)
 
     if (!userErr) {
-      return ReplyDao.setReplyByDataValue(reply, userData, 'user_id', 'user_info')
+      return ReplyController.setReplyByDataValue(reply, userData, 'user_id', 'user_info')
 
     } else {
       console.log('userErr', userErr)
@@ -312,11 +312,11 @@ class ReplyDao {
       let reply = res.rows
 
       if (parseInt(is_article, 10) === 1) {
-        reply = await ReplyDao._handleArticle(reply)
+        reply = await ReplyController._handleArticle(reply)
       }
 
       if (parseInt(is_user, 10) === 1) {
-        reply = await ReplyDao._handleUser(reply)
+        reply = await ReplyController._handleUser(reply)
       }
 
       const data = {
@@ -339,5 +339,5 @@ class ReplyDao {
 }
 
 module.exports = {
-  ReplyDao
+  ReplyController
 }

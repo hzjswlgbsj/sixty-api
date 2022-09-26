@@ -11,7 +11,7 @@ const {
     UserLoginValidator
 } = require('../../validators/user')
 
-const { UserDao } = require('../../dao/user');
+const { UserController } = require('../../controller/user');
 const { Auth } = require('../../../middlewares/auth');
 const { LoginManager } = require('../../service/login');
 const { Resolve } = require('../../lib/helper');
@@ -32,7 +32,7 @@ router.post('/register', async (ctx) => {
     const password = v.get('body.password2');
 
     // 创建用户
-    const [err, data] = await UserDao.create({
+    const [err, data] = await UserController.create({
         password,
         email,
         username: v.get('body.username')
@@ -68,7 +68,7 @@ router.post('/login', async (ctx) => {
     });
 
     if (!err) {
-        let [err, data] = await UserDao.detail(id);
+        let [err, data] = await UserController.detail(id);
         if (!err) {
             data.setDataValue('token', token)
             ctx.response.status = 200;
@@ -85,7 +85,7 @@ router.get('/auth', new Auth(AUTH_USER).m, async (ctx) => {
     const id = ctx.auth.uid;
 
     // 查询用户信息
-    let [err, data] = await UserDao.detail(id, 1);
+    let [err, data] = await UserController.detail(id, 1);
     if (!err) {
         ctx.response.status = 200;
         ctx.body = res.json(data)
@@ -99,7 +99,7 @@ router.get('/auth', new Auth(AUTH_USER).m, async (ctx) => {
 // 需要管理员及以上才能操作
 router.get('/list', new Auth(AUTH_ADMIN).m, async (ctx) => {
     // 查询用户信息
-    let [err, data] = await UserDao.list(ctx.query);
+    let [err, data] = await UserController.list(ctx.query);
     if (!err) {
         ctx.response.status = 200;
         ctx.body = res.json(data)
@@ -116,7 +116,7 @@ router.get('/detail/:id', new Auth(AUTH_USER).m, async (ctx) => {
     const v = await new PositiveIdParamsValidator().validate(ctx);
     const id = v.get('path.id');
     // 查询用户信息
-    let [err, data] = await UserDao.detail(id);
+    let [err, data] = await UserController.detail(id);
     if (!err) {
         ctx.response.status = 200;
         ctx.body = res.json(data)
@@ -135,7 +135,7 @@ router.delete('/delete/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
     // 获取用户ID参数
     const id = v.get('path.id');
     // 删除用户
-    const [err, data] = await UserDao.destroy(id);
+    const [err, data] = await UserController.destroy(id);
     if (!err) {
         ctx.response.status = 200;
         ctx.body = res.success('删除用户成功');
@@ -153,7 +153,7 @@ router.put('/update/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
     // 获取用户ID参数
     const id = v.get('path.id');
     // 删除用户
-    const [err, data] = await UserDao.update(id, v);
+    const [err, data] = await UserController.update(id, v);
     if (!err) {
         ctx.response.status = 200;
         ctx.body = res.success('更新用户成功');

@@ -11,7 +11,7 @@ const {
   PositiveIdParamsValidator
 } = require('../../validators/category');
 
-const { CategoryDao } = require('../../dao/category');
+const { CategoryController } = require('../../controller/category');
 const { Auth } = require('../../../middlewares/auth');
 
 const { Resolve } = require('../../lib/helper');
@@ -29,7 +29,7 @@ const router = new Router({
 router.post('/category', new Auth(AUTH_ADMIN).m, async (ctx) => {
   // 通过验证器校验参数是否通过
   const v = await new CategoryValidator().validate(ctx);
-  const [err, data] = await CategoryDao.create({
+  const [err, data] = await CategoryController.create({
     name: v.get('body.name'),
     status: v.get('status'),
     sort_order: v.get('sort_order'),
@@ -57,7 +57,7 @@ router.delete('/category/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
   // 获取分类ID参数
   const id = v.get('path.id');
   // 删除分类
-  const [err, data] = await CategoryDao.destroy(id);
+  const [err, data] = await CategoryController.destroy(id);
   if (!err) {
     ctx.response.status = 200;
     ctx.body = res.success('删除分类成功');
@@ -78,7 +78,7 @@ router.put('/category/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
   // 获取分类ID参数
   const id = v.get('path.id');
   // 更新分类
-  const [err, data] = await CategoryDao.update(id, v);
+  const [err, data] = await CategoryController.update(id, v);
   if (!err) {
     ctx.response.status = 200;
     ctx.body = res.success('更新分类成功');
@@ -91,7 +91,7 @@ router.put('/category/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
  * 获取所有的分类
  */
 router.get('/category', async (ctx) => {
-  const [err, data] = await CategoryDao.list(ctx.query);
+  const [err, data] = await CategoryController.list(ctx.query);
   if (!err) {
     // 返回结果
     ctx.response.status = 200;
@@ -112,7 +112,7 @@ router.get('/category/:id', async (ctx) => {
   // 获取参数
   const id = v.get('path.id');
   // 获取分类
-  const [err, data] = await CategoryDao.detail(id);
+  const [err, data] = await CategoryController.detail(id);
   if (!err) {
     // 返回结果
     ctx.response.status = 200;

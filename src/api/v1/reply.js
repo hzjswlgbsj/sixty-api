@@ -1,6 +1,6 @@
 const Router = require('koa-router')
 
-const { ReplyDao } = require('../../dao/reply')
+const { ReplyController } = require('../../controller/reply')
 const { ReplyValidator, PositiveArticleIdParamsValidator } = require('../../validators/reply')
 const { Auth } = require('../../../middlewares/auth');
 
@@ -18,7 +18,7 @@ router.post('/reply', async (ctx) => {
   // 通过验证器校验参数是否通过
   const v = await new ReplyValidator().validate(ctx);
   // 创建回复
-  const [err, data] = await ReplyDao.create(v);
+  const [err, data] = await ReplyController.create(v);
 
   if (!err) {
     // 返回结果
@@ -37,7 +37,7 @@ router.delete('/reply/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
   // 获取分类ID参数
   const id = v.get('path.id');
-  const [err, data] = await ReplyDao.destroy(id);
+  const [err, data] = await ReplyController.destroy(id);
   if (!err) {
     // 返回结果
     ctx.response.status = 200;
@@ -54,7 +54,7 @@ router.put('/reply/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
   // 获取分类ID参数
   const id = v.get('path.id');
-  const [err, data] = await ReplyDao.update(id, v);
+  const [err, data] = await ReplyController.update(id, v);
   if (!err) {
     // 返回结果
     ctx.response.status = 200;
@@ -68,7 +68,7 @@ router.put('/reply/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
 // 获取回复列表
 router.get('/reply', async (ctx) => {
-  const [err, data] = await ReplyDao.list(ctx.query);
+  const [err, data] = await ReplyController.list(ctx.query);
   if (!err) {
     ctx.response.status = 200;
     ctx.body = res.json(data);
@@ -84,7 +84,7 @@ router.get('/reply/:id', async (ctx) => {
 
   // 获取分类ID参数
   const id = v.get('path.id');
-  const [err, data] = await ReplyDao.detail(id)
+  const [err, data] = await ReplyController.detail(id)
 
   if (!err) {
     // 返回结果

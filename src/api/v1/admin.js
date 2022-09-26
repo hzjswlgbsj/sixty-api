@@ -1,9 +1,3 @@
-/**
- * @description 管理员的路由 API 接口
- * @description Administrator's routing API interface
- * @author 梁凤波, Peter Liang
- */
-
 const Router = require('koa-router')
 
 const {
@@ -11,7 +5,7 @@ const {
   AdminLoginValidator
 } = require('../../validators/admin')
 
-const { AdminDao } = require('../../dao/admin');
+const { AdminController } = require('../../controller/admin');
 const { Auth } = require('../../../middlewares/auth');
 const { LoginManager } = require('../../service/login');
 const { Resolve } = require('../../lib/helper');
@@ -29,7 +23,7 @@ router.post('/register', async (ctx) => {
   const v = await new RegisterValidator().validate(ctx);
 
   // 创建管理员
-  const [err, data] = await AdminDao.create({
+  const [err, data] = await AdminController.create({
     email: v.get('body.email'),
     password: v.get('body.password2'),
     nickname: v.get('body.nickname')
@@ -68,7 +62,7 @@ router.get('/auth', new Auth(AUTH_ADMIN).m, async (ctx) => {
   const id = ctx.auth.uid;
 
   // 查询用户信息
-  let [err, data] = await AdminDao.detail(id);
+  let [err, data] = await AdminController.detail(id);
 
   if (!err) {
     // 返回结果

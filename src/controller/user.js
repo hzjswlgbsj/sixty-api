@@ -1,13 +1,8 @@
-/**
- * @description 用户的数据访问对象
- * @description Data Access Objects for Useristrators
- * @author 梁凤波, Peter Liang
- */
 const { Op } = require('sequelize')
 const { User } = require('../models/user')
 const bcrypt = require('bcryptjs')
 
-class UserDao {
+class UserController {
   // 创建用用户
   static async create(params) {
     const { email, password, username } = params
@@ -187,5 +182,5 @@ class UserDao {
 }
 
 module.exports = {
-  UserDao
+  UserController
 }

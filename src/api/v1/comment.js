@@ -1,7 +1,6 @@
 const Router = require('koa-router')
 
-const { CommentDao } = require('../../dao/comment')
-const { ReplyDao } = require('../../dao/reply')
+const { CommentController } = require('../../controller/comment')
 const { CommentValidator, PositiveArticleIdParamsValidator } = require('../../validators/comment')
 const { Auth } = require('../../../middlewares/auth');
 
@@ -18,7 +17,7 @@ const router = new Router({
 router.post('/comment', async (ctx) => {
   // 通过验证器校验参数是否通过
   const v = await new CommentValidator().validate(ctx);
-  const [err, data] = await CommentDao.create(v);
+  const [err, data] = await CommentController.create(v);
   if (!err) {
     const resData = {
       id: data.id,
@@ -45,7 +44,7 @@ router.delete('/comment/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
   // 获取分类ID参数
   const id = v.get('path.id');
-  const [err, data] = await CommentDao.destroy(id);
+  const [err, data] = await CommentController.destroy(id);
   if (!err) {
     // 返回结果
     ctx.response.status = 200;
@@ -62,7 +61,7 @@ router.put('/comment/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
   // 获取分类ID参数
   const id = v.get('path.id');
-  const [err, data] = await CommentDao.update(id, v);
+  const [err, data] = await CommentController.update(id, v);
   if (!err) {
     // 返回结果
     ctx.response.status = 200;
@@ -75,7 +74,7 @@ router.put('/comment/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
 // 获取评论列表
 router.get('/comment', async (ctx) => {
-  let [err, data] = await CommentDao.list(ctx.query);
+  let [err, data] = await CommentController.list(ctx.query);
   if (!err) {
     ctx.response.status = 200;
     ctx.body = res.json(data);
@@ -91,7 +90,7 @@ router.get('/comment/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
   // 获取分类ID参数
   const id = v.get('path.id');
-  const [err, data] = await CommentDao.detail(id, ctx.query)
+  const [err, data] = await CommentController.detail(id, ctx.query)
   // 返回结果
   if (!err) {
     ctx.response.status = 200;
@@ -103,7 +102,7 @@ router.get('/comment/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
 // 获取关联目标下的评论列表
 router.get('/comment/target/list', async (ctx) => {
-  const [err, data] = await CommentDao.targetComment(ctx.query)
+  const [err, data] = await CommentController.targetComment(ctx.query)
   if (!err) {
     // 返回结果
     ctx.response.status = 200;
