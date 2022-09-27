@@ -19,7 +19,7 @@ const router = new Router({
 router.post('/upload/token', new Auth(AUTH_ADMIN).m, async (ctx) => {
     // console.log('mac', mac)
     const options = {
-        scope: 'boblog-v2',
+        scope: 'sixty-v2',
         expires: 7200
     };
     const putPolicy = new qiniu.rs.PutPolicy(options);

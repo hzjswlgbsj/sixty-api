@@ -1,7 +1,7 @@
 module.exports = {
   environment: 'dev',
   database: {
-    dbName: 'boblog',
+    dbName: 'sixty',
     host: 'localhost',
     port: 3306,
     user: 'root',

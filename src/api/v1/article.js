@@ -101,12 +101,13 @@ router.put('/article/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
 /**
  * 获取文章列表
  */
-router.get('/article', async (ctx) => {
-  // 尝试获文章取缓存
-  const { category_id = 0, page = 1 } = ctx.query;
-
+router.post('/articles', async (ctx) => {
+  let { limit } = ctx.request.body;
+  limit = limit ? Number(limit) : 10
   // 没有缓存，则读取数据库
-  const [err, data] = await ArticleController.list(ctx.query);
+  const [err, data] = await ArticleController.list({
+    limit
+  });
   if (!err) {
     ctx.response.status = 200;
     ctx.body = res.json(data)

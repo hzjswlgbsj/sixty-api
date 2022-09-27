@@ -16,7 +16,7 @@ const sequelize = new Sequelize(dbName, user, password, {
   logging: false,
   timezone: '+08:00',
   define: {
-    // create_time && update_time
+    // created_at && updated_at
     timestamps: true,
     // delete_time
     paranoid: true,
@@ -49,7 +49,7 @@ sequelize.authenticate().then(res => {
   console.error('Unable to connect to the database:', err);
 })
 
-// sequelize.query("CREATE DATABASE IF NOT EXISTS boblog DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci").then(res=>{
+// sequelize.query("CREATE DATABASE IF NOT EXISTS sixty DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci").then(res=>{
 //   console.log('CREATE DATABASE SUCCESS!')
 // }).catch(err => {
 //   console.log('CREATE DATABASE FAIL!', err)

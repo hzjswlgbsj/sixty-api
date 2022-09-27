@@ -122,7 +122,7 @@ class ArticleController {
 
   // 获取文章列表
   static async list(params = {}) {
-    const { category_id, keyword, page_size = 10, status, page = 1 } = params;
+    const { category_id, keyword, limit = 5, status, page = 1 } = params;
 
     // 筛选方式
     let filter = {
@@ -145,9 +145,9 @@ class ArticleController {
       filter.status = status
     }
     try {
-      const article = await Article.scope('iv').findAndCountAll({
-        limit: page_size, //每页10条
-        offset: (page - 1) * page_size,
+      const article = await Article.findAndCountAll({
+        limit, //每页10条
+        offset: (page - 1) * limit,
         where: filter,
         order: [
           ['created_at', 'DESC']
@@ -179,10 +179,10 @@ class ArticleController {
         // 分页
         meta: {
           current_page: parseInt(page),
-          per_page: 10,
+          per_page: limit,
           count: article.count,
           total: article.count,
-          total_pages: Math.ceil(article.count / 10),
+          total_pages: Math.ceil(article.count / limit),
         }
       }
 
