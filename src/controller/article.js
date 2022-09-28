@@ -245,14 +245,14 @@ class ArticleController {
   }
 
   // 更新文章浏览次数
-  static async updateBrowse(id, browse) {
+  static async updateViews(id, views) {
     // 查询文章
     const article = await Article.findByPk(id);
     if (!article) {
       throw new global.errs.NotFound('没有找到相关文章');
     }
     // 更新文章浏览
-    article.browse = browse;
+    article.views = views;
 
     try {
       const res = await article.save();
@@ -263,8 +263,7 @@ class ArticleController {
   }
 
   // 文章详情
-  static async detail(id, query) {
-    const { keyword } = query
+  static async detail(id, body) {
     try {
       let filter = {
         id,

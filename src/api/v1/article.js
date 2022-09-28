@@ -36,7 +36,7 @@ const md = require('markdown-it')({
 const AUTH_ADMIN = 16;
 
 const router = new Router({
-  prefix: '/api/v1'
+  prefix: '/article'
 })
 
 /**
@@ -101,7 +101,7 @@ router.put('/article/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
 /**
  * 获取文章列表
  */
-router.post('/articles', async (ctx) => {
+router.post('/all', async (ctx) => {
   let { limit } = ctx.request.body;
   limit = limit ? Number(limit) : 10
   // 没有缓存，则读取数据库
@@ -119,14 +119,14 @@ router.post('/articles', async (ctx) => {
 /**
  * 查询文章详情
  */
-router.get('/article/:id', async (ctx) => {
-
+router.post('/detail', async (ctx) => {
   // 通过验证器校验参数是否通过
   const v = await new PositiveIdParamsValidator().validate(ctx);
   // 获取文章ID参数
-  const id = v.get('path.id');
+  const id = v.get('body.id');
+
   // 查询文章
-  const [err, data] = await ArticleController.detail(id, ctx.query);
+  const [err, data] = await ArticleController.detail(id, ctx.body);
   if (!err) {
     // 获取关联此文章的评论列表
     const [commentError, commentData] = await CommentController.targetComment({
@@ -143,7 +143,7 @@ router.get('/article/:id', async (ctx) => {
 
 
     // 更新文章浏览
-    await ArticleController.updateBrowse(id, ++data.browse);
+    await ArticleController.updateViews(id, ++data.views);
     // 返回结果
     ctx.response.status = 200;
     ctx.body = res.json(data);
