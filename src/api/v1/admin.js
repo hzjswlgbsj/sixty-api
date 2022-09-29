@@ -14,7 +14,7 @@ const res = new Resolve();
 const AUTH_ADMIN = 16;
 
 const router = new Router({
-  prefix: '/api/v1/admin'
+  prefix: '/admin'
 })
 
 // 管理员注册

@@ -16,6 +16,7 @@ class Auth {
     // token body header
     // HTTP 规定 身份验证机制 HttpBasicAuth
     return async (ctx, next) => {
+      console.log(1111111111, ctx.req)
       const tokenToken = basicAuth(ctx.req);
 
       let errMsg = "无效的token";

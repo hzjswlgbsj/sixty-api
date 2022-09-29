@@ -112,7 +112,7 @@ Article.init({
 }, {
   sequelize,
   modelName: 'article',
-  tableName: 'hi_article'
+  tableName: 'article'
 })
 
 module.exports = {
