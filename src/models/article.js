@@ -49,40 +49,12 @@ Article.init({
     allowNull: false,
     comment: '发表地点'
   },
-  // seo_keyword: {
-  //   type: DataTypes.STRING(128),
-  //   allowNull: false,
-  //   comment: '文章SEO关键字'
-  // },
-  // status: {
-  //   type: DataTypes.TINYINT,
-  //   allowNull: true,
-  //   defaultValue: 1,
-  //   comment: '文章展示状态：0-隐藏,1-正常'
-  // },
-  // sort_order: {
-  //   type: DataTypes.INTEGER(10).UNSIGNED,
-  //   allowNull: true,
-  //   defaultValue: 1,
-  //   comment: "排序编号",
-  // },
   views: {
     type: DataTypes.INTEGER(10).UNSIGNED,
     allowNull: true,
     defaultValue: 0,
     comment: '文章浏览次数'
   },
-  // favorite_num: {
-  //   type: DataTypes.INTEGER(10).UNSIGNED,
-  //   allowNull: true,
-  //   defaultValue: 0,
-  //   comment: '文章点赞次数'
-  // },
-  // admin_id: {
-  //   type: DataTypes.INTEGER(10).UNSIGNED,
-  //   allowNull: false,
-  //   comment: '发布管理员ID'
-  // },
   category_id: {
     type: DataTypes.INTEGER(10).UNSIGNED,
     allowNull: false,

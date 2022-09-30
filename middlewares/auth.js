@@ -16,7 +16,6 @@ class Auth {
     // token body header
     // HTTP 规定 身份验证机制 HttpBasicAuth
     return async (ctx, next) => {
-      console.log(1111111111, ctx.req)
       const tokenToken = basicAuth(ctx.req);
 
       let errMsg = "无效的token";
@@ -28,7 +27,6 @@ class Auth {
 
       try {
         var decode = jwt.verify(tokenToken.name, global.config.security.secretKey);
-
       } catch (error) {
         // token 不合法 过期
         if (error.name === 'TokenExpiredError') {

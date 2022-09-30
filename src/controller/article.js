@@ -29,13 +29,12 @@ class ArticleController {
     const article = new Article();
 
     article.title = title;
-    article.description = v.get('body.description');
-    article.img_url = v.get('body.img_url');
+    article.introduction = v.get('body.introduction');
+    article.cover_picture = v.get('body.cover_picture');
     article.content = v.get('body.content');
-    article.seo_keyword = v.get('body.seo_keyword');
-    article.status = v.get('body.status') || 1;
-    article.sort_order = v.get('body.sort_order');
-    article.admin_id = v.get('body.admin_id');
+    article.nickname = v.get('body.nickname');
+    article.tag_ids = v.get('body.tag_ids');
+    article.music_id = v.get('body.music_id');
     article.category_id = v.get('body.category_id');
 
     try {
