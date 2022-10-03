@@ -16,16 +16,18 @@ class ArticleValidator extends LinValidator {
   }
 
   async validateCategoryId(vals) {
-    const categoryId = vals.body.category_id;
+    if (vals.body.category_id) {
+      const categoryId = vals.body.category_id;
 
-    const category = await Category.findOne({
-      where: {
-        id: categoryId
+      const category = await Category.findOne({
+        where: {
+          id: categoryId
+        }
+      });
+  
+      if (!category) {
+        throw new Error('暂无此分类ID')
       }
-    });
-
-    if (!category) {
-      throw new Error('暂无此分类ID')
     }
   }
 }

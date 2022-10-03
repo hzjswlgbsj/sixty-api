@@ -45,13 +45,12 @@ const router = new Router({
 router.post('/add', new Auth(AUTH_ADMIN).m, async (ctx) => {
   // 通过验证器校验参数是否通过
   const v = await new ArticleValidator().validate(ctx);
-
   // 创建文章
   const [err, data] = await ArticleController.create(v);
   if (!err) {
     // 返回结果
     ctx.response.status = 200;
-    ctx.body = res.success('创建文章成功');
+    ctx.body = res.json(data.id)
   } else {
     ctx.body = res.fail(err);
   }

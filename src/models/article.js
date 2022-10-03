@@ -41,12 +41,12 @@ Article.init({
   },
   tag_ids: {
     type: DataTypes.TEXT,
-    allowNull: false,
+    allowNull: true,
     comment: '标签id集合'
   },
   location: {
     type: DataTypes.TEXT,
-    allowNull: false,
+    allowNull: true,
     comment: '发表地点'
   },
   views: {
@@ -57,12 +57,12 @@ Article.init({
   },
   category_id: {
     type: DataTypes.INTEGER(10).UNSIGNED,
-    allowNull: false,
+    allowNull: true,
     comment: '关联分类ID'
   },
   music_id: {
     type: DataTypes.INTEGER(10).UNSIGNED,
-    allowNull: false,
+    allowNull: true,
     comment: '网易云音乐的id'
   },
   created_at: {

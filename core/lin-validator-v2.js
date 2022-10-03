@@ -64,7 +64,7 @@ class LinValidator {
     let params = this._assembleAllParams(ctx)
     this.data = cloneDeep(params)
     this.parsed = cloneDeep(params)
-
+    
     const memberKeys = findMembers(this, {
       filter: this._findMembersFilter.bind(this)
     })
@@ -73,13 +73,16 @@ class LinValidator {
     // const map = new Map(memberKeys)
     for (let key of memberKeys) {
       const result = await this._check(key, alias)
+      
       if (!result.success) {
         errorMsgs.push(result.msg)
       }
     }
+
     if (errorMsgs.length != 0) {
       throw new ParameterException(errorMsgs)
     }
+
     ctx.v = this
     return this
   }
@@ -102,7 +105,6 @@ class LinValidator {
       // 别名替换
       key = alias[key] ? alias[key] : key
       const param = this._findParam(key)
-
       result = ruleField.validate(param.value)
 
       if (result.pass) {
@@ -114,6 +116,7 @@ class LinValidator {
         }
       }
     }
+
     if (!result.pass) {
       const msg = `${isCustomFunc ? '' : key}${result.msg}`
       return {

@@ -27,7 +27,7 @@ class ArticleController {
 
     // 创建文章
     const article = new Article();
-
+    
     article.title = title;
     article.introduction = v.get('body.introduction');
     article.cover_picture = v.get('body.cover_picture');
