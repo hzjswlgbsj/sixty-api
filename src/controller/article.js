@@ -121,7 +121,7 @@ class ArticleController {
 
   // 获取文章列表
   static async list(params = {}) {
-    const { category_id, keyword, limit = 5, status, page = 1 } = params;
+    const { category_id, keyword, limit = 5, page = 1 } = params;
 
     // 筛选方式
     let filter = {
@@ -140,9 +140,8 @@ class ArticleController {
       };
     }
 
-    if (status) {
-      filter.status = status
-    }
+    filter.status = 1
+
     try {
       const article = await Article.findAndCountAll({
         limit, //每页10条
@@ -220,21 +219,57 @@ class ArticleController {
   static async update(id, v) {
     // 查询文章
     const article = await Article.findByPk(id);
+
     if (!article) {
       throw new global.errs.NotFound('没有找到相关文章');
     }
 
-    // 更新文章
-    article.title = v.get('body.title');
-    article.description = v.get('body.description');
-    article.img_url = v.get('body.img_url');
-    article.content = v.get('body.content');
-    article.seo_keyword = v.get('body.seo_keyword');
-    article.status = v.get('body.status');
-    article.sort_order = v.get('body.sort_order');
-    article.admin_id = v.get('body.admin_id');
-    article.category_id = v.get('body.category_id');
+    const title = v.get('body.title');
+    const introduction = v.get('body.introduction');
+    const cover_picture = v.get('body.cover_picture');
+    const content = v.get('body.content');
+    const status = v.get('body.status');
+    const category_id = v.get('body.category_id');
+    const tag_ids = v.get('body.tag_ids');
+    const music_id = v.get('body.music_id');
+    const location = v.get('body.location');
 
+    if (title) {
+      article.title = title;
+    }
+
+    if (introduction) {
+      article.introduction = introduction;
+    }
+
+    if (cover_picture) {
+      article.cover_picture = cover_picture;
+    }
+
+    if (content) {
+      article.content = content;
+    }
+
+    if (typeof status !== 'undefined') {
+      article.status = Number(status);
+    }
+
+    if (category_id) {
+      article.category_id = category_id;
+    }
+
+    if (tag_ids) {
+      article.tag_ids = tag_ids;
+    }
+
+    if (music_id) {
+      article.music_id = music_id;
+    }
+
+    if (location) {
+      article.location = location;
+    }
+    
     try {
       const res = await article.save();
       return [null, res]
@@ -284,9 +319,12 @@ class ArticleController {
         article = dataAndAdmin
       }
 
-
       if (!article) {
         throw new global.errs.NotFound('没有找到相关文章');
+      }
+
+      if (article.status === 0) {
+        throw new global.errs.NotFound('该文章已经被删除');
       }
 
       const comment = await Comment.findAndCountAll({

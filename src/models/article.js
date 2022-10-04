@@ -60,6 +60,11 @@ Article.init({
     allowNull: true,
     comment: '关联分类ID'
   },
+  status: {
+    type: DataTypes.INTEGER(2).UNSIGNED,
+    allowNull: false,
+    comment: '文章状态，1-正常  0-异常'
+  },
   music_id: {
     type: DataTypes.INTEGER(10).UNSIGNED,
     allowNull: true,

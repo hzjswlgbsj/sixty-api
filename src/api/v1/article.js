@@ -79,12 +79,13 @@ router.delete('/article/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
 /**
  * 更新文章
  */
-router.put('/article/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
+router.post('/update', new Auth(AUTH_ADMIN).m, async (ctx) => {
   // 通过验证器校验参数是否通过
   const v = await new PositiveIdParamsValidator().validate(ctx);
 
   // 获取文章ID参数
-  const id = v.get('path.id');
+  const id = v.get('body.id');
+
   // 更新文章
   const [err, data] = await ArticleController.update(id, v);
   if (!err) {
@@ -125,6 +126,7 @@ router.post('/detail', async (ctx) => {
 
   // 查询文章
   const [err, data] = await ArticleController.detail(id, ctx.body);
+  
   if (!err) {
     // 获取关联此文章的评论列表
     const [commentError, commentData] = await CommentController.targetComment({
