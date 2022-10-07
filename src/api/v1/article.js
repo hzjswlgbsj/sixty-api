@@ -57,17 +57,36 @@ router.post('/add', new Auth(AUTH_ADMIN).m, async (ctx) => {
 });
 
 /**
- * 删除文章
+ * 彻底删除文章
  */
-router.delete('/article/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
+router.post('/deleteCompletely', new Auth(AUTH_ADMIN).m, async (ctx) => {
+  // 通过验证器校验参数是否通过
+  const v = await new PositiveIdParamsValidator().validate(ctx);
+
+  // 获取文章ID参数
+  const id = v.get('body.id');
+  // 删除文章
+  const [err, data] = await ArticleController.deleteCompletely(id);
+  if (!err) {
+    ctx.response.status = 200;
+    ctx.body = res.success('彻底删除文章成功');
+  } else {
+    ctx.body = res.fail(err);
+  }
+})
+
+/**
+ * 软删除文章
+ */
+router.post('/delete', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
   // 通过验证器校验参数是否通过
   const v = await new PositiveIdParamsValidator().validate(ctx);
 
   // 获取文章ID参数
-  const id = v.get('path.id');
+  const id = v.get('body.id');
   // 删除文章
-  const [err, data] = await ArticleController.destroy(id);
+  const [err, data] = await ArticleController.delete(id);
   if (!err) {
     ctx.response.status = 200;
     ctx.body = res.success('删除文章成功');

@@ -191,7 +191,7 @@ class ArticleController {
   }
 
   // 删除文章
-  static async destroy(id) {
+  static async delete(id) {
     // 检测是否存在文章
     const article = await Article.findOne({
       where: {
@@ -199,17 +199,39 @@ class ArticleController {
         deleted_at: null
       }
     });
+    
     // 不存在抛出错误
     if (!article) {
       throw new global.errs.NotFound('没有找到相关文章');
-
     }
 
     try {
-      // 软删除文章
       const res = await article.destroy()
       return [null, res]
 
+    } catch (err) {
+      return [err, null]
+    }
+  }
+
+  // 彻底删除文章
+  static async deleteCompletely(id) {
+    // 检测是否存在文章
+    const article = await Article.findByPk(id);
+
+    // 不存在抛出错误
+    if (!article) {
+      throw new global.errs.NotFound('没有找到相关文章');
+    }
+    
+    try {
+      const res = await article.destroy({
+        where: {
+          id
+        },
+        force: true
+      });
+      return [null, res]
     } catch (err) {
       return [err, null]
     }
@@ -268,6 +290,10 @@ class ArticleController {
 
     if (location) {
       article.location = location;
+    }
+
+    if (status) {
+      article.status = status;
     }
     
     try {
