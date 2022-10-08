@@ -4,12 +4,12 @@ const { sequelize } = require('../../core/db')
 const { Model, DataTypes } = require('sequelize')
 
 // 定义文章模型
-class Category extends Model {
+class Tag extends Model {
 
 }
 
 // 初始分类模型
-Category.init({
+Tag.init({
   id: {
     type: DataTypes.INTEGER(10).UNSIGNED,
     primaryKey: true,
@@ -21,23 +21,11 @@ Category.init({
     allowNull: false,
     comment: '分类名称'
   },
-  status: {
-    type: DataTypes.TINYINT,
-    allowNull: true,
-    defaultValue: 1,
-    comment: "类别状态,0-隐藏,1-正常",
-  },
-  sort_order: {
-    type: DataTypes.INTEGER(10).UNSIGNED,
-    allowNull: true,
-    defaultValue: 1,
-    comment: "排序编号",
-  },
-  parent_id: {
-    type: DataTypes.INTEGER(10).UNSIGNED,
-    allowNull: true,
-    defaultValue: 0,
-    comment: '父类别id,id=0代表根节点'
+  color: {
+    type: DataTypes.STRING(50),
+    allowNull: false,
+    defaultValue: '#7B68EE',
+    comment: "标签颜色",
   },
   created_at: {
     type: DataTypes.DATE,
@@ -46,13 +34,21 @@ Category.init({
     get() {
       return moment(this.getDataValue('created_at')).format('YYYY-MM-DD HH:mm:ss');
     }
+  },
+  updated_at: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    comment: '更新时间',
+    get() {
+      return moment(this.getDataValue('updated_at')).format('YYYY-MM-DD HH:mm:ss');
+    }
   }
 }, {
   sequelize,
-  modelName: 'category',
-  tableName: 'category'
+  modelName: 'tag',
+  tableName: 'tag'
 })
 
 module.exports = {
-  Category
+  Tag
 }

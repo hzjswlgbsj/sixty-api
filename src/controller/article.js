@@ -323,7 +323,7 @@ class ArticleController {
   }
 
   // 文章详情
-  static async detail(id, body) {
+  static async detail(id) {
     try {
       let filter = {
         id,

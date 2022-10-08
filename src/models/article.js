@@ -73,7 +73,7 @@ Article.init({
   created_at: {
     type: DataTypes.DATE,
     allowNull: false,
-    comment: '创建时间',
+    comment: '更新时间',
     get() {
       return moment(this.getDataValue('created_at')).format('YYYY-MM-DD HH:mm:ss');
     }
