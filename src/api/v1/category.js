@@ -1,9 +1,3 @@
-/**
- * @description 分类的路由 API 接口
- * @description Category's routing API interface
- * @author 梁凤波, Peter Liang
- */
-
 const Router = require('koa-router');
 
 const {

@@ -1,9 +1,3 @@
-/**
- * @description 分类的路由 API 接口
- * @description Category's routing API interface
- * @author 梁凤波, Peter Liang
- */
-
 const Router = require('koa-router');
 
 const {
@@ -47,20 +41,20 @@ router.post('/add', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
 
 /**
- * 删除文章
+ * 删除标签
  */
-router.delete('/category/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
+router.post('/delete', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
   // 通过验证器校验参数是否通过
   const v = await new PositiveIdParamsValidator().validate(ctx);
 
-  // 获取分类ID参数
-  const id = v.get('path.id');
-  // 删除分类
-  const [err, data] = await TagController.destroy(id);
+  // 获取标签ID参数
+  const id = v.get('body.id');
+  // 删除标签
+  const [err, data] = await TagController.delete(id);
   if (!err) {
     ctx.response.status = 200;
-    ctx.body = res.success('删除分类成功');
+    ctx.body = res.success('删除标签成功');
   } else {
     ctx.body = res.fail(err);
   }
@@ -68,50 +62,49 @@ router.delete('/category/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
 
 /**
- * 更新分类
+ * 更新标签
  */
-router.put('/category/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
+router.post('/update', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
   // 通过验证器校验参数是否通过
   const v = await new PositiveIdParamsValidator().validate(ctx);
 
-  // 获取分类ID参数
-  const id = v.get('path.id');
-  // 更新分类
+  // 获取标签ID参数
+  const id = v.get('body.id');
+  // 更新标签
   const [err, data] = await TagController.update(id, v);
   if (!err) {
     ctx.response.status = 200;
-    ctx.body = res.success('更新分类成功');
+    ctx.body = res.success('更新标签成功');
   } else {
     ctx.body = res.fail(err);
   }
 })
 
 /**
- * 获取所有的分类
+ * 获取所有的标签
  */
-router.get('/category', async (ctx) => {
-  const [err, data] = await TagController.list(ctx.query);
+router.post('/all', async (ctx) => {
+  // 没有缓存，则读取数据库
+  const [err, data] = await TagController.list(ctx.request.body);
   if (!err) {
-    // 返回结果
     ctx.response.status = 200;
-    ctx.body = res.json(data);
+    ctx.body = res.json(data)
   } else {
-    ctx.body = res.fail(err);
+    ctx.body = res.fail(err)
   }
-})
+});
 
 /**
- * 获取分类详情
+ * 获取标签详情
  */
-router.get('/category/:id', async (ctx) => {
-
+router.post('/detail', async (ctx) => {
   // 通过验证器校验参数是否通过
   const v = await new PositiveIdParamsValidator().validate(ctx);
 
   // 获取参数
-  const id = v.get('path.id');
-  // 获取分类
+  const id = v.get('body.id');
+  // 获取标签
   const [err, data] = await TagController.detail(id);
   if (!err) {
     // 返回结果
