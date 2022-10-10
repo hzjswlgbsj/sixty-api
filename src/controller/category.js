@@ -6,6 +6,7 @@ class CategoryController {
   static async create(params = {}) {
     const {
       name,
+      status,
       sort_order = 1,
       parent_id = 0
     } = params
@@ -24,6 +25,7 @@ class CategoryController {
     const category = new Category();
     category.name = name
     category.sort_order = sort_order
+    category.status = status
     category.parent_id = parent_id
 
     try {
@@ -43,7 +45,7 @@ class CategoryController {
 
 
   // 删除分类
-  static async destroy(id) {
+  static async delete(id) {
     // 查询分类
     const category = await Category.findOne({
       where: {
@@ -104,7 +106,7 @@ class CategoryController {
 
   // 分类列表
   static async list(query = {}) {
-    const { status, name, id, page_size = 10, page = 1 } = query
+    const { status, name, id, limit = 10, page = 1 } = query
     let params = {}
     if (status) {
       params.status = status
@@ -120,12 +122,11 @@ class CategoryController {
       params.id = id
     }
 
-    console.log('params', params)
     try {
       const category = await Category.scope('bh').findAndCountAll({
         where: params,
-        limit: page_size, //每页10条
-        offset: (page - 1) * page_size,
+        limit: limit, //每页10条
+        offset: (page - 1) * limit,
         order: [
           ['created_at', 'DESC']
         ]
@@ -139,7 +140,7 @@ class CategoryController {
           per_page: 10,
           count: category.count,
           total: category.count,
-          total_pages: Math.ceil(category.count / 10),
+          total_pages: Math.ceil(category.count / limit),
         }
       }
 

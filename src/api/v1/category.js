@@ -14,19 +14,20 @@ const res = new Resolve();
 const AUTH_ADMIN = 16;
 
 const router = new Router({
-  prefix: '/api/v1'
+  prefix: '/category'
 })
 
 /**
  * 创建分类
  */
-router.post('/category', new Auth(AUTH_ADMIN).m, async (ctx) => {
+router.post('/add', new Auth(AUTH_ADMIN).m, async (ctx) => {
   // 通过验证器校验参数是否通过
   const v = await new CategoryValidator().validate(ctx);
+
   const [err, data] = await CategoryController.create({
     name: v.get('body.name'),
-    status: v.get('status'),
-    sort_order: v.get('sort_order'),
+    status: v.get('body.status'),
+    sort_order: v.get('body.sort_order'),
     parent_id: v.get('body.parent_id'),
   });
 
@@ -41,17 +42,17 @@ router.post('/category', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
 
 /**
- * 删除文章
+ * 删除分类
  */
-router.delete('/category/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
+router.post('/delete', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
   // 通过验证器校验参数是否通过
   const v = await new PositiveIdParamsValidator().validate(ctx);
 
   // 获取分类ID参数
-  const id = v.get('path.id');
+  const id = v.get('body.id');
   // 删除分类
-  const [err, data] = await CategoryController.destroy(id);
+  const [err, data] = await CategoryController.delete(id);
   if (!err) {
     ctx.response.status = 200;
     ctx.body = res.success('删除分类成功');
@@ -64,13 +65,13 @@ router.delete('/category/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
 /**
  * 更新分类
  */
-router.put('/category/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
+router.post('/update', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
   // 通过验证器校验参数是否通过
   const v = await new PositiveIdParamsValidator().validate(ctx);
 
   // 获取分类ID参数
-  const id = v.get('path.id');
+  const id = v.get('body.id');
   // 更新分类
   const [err, data] = await CategoryController.update(id, v);
   if (!err) {
@@ -84,8 +85,8 @@ router.put('/category/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
 /**
  * 获取所有的分类
  */
-router.get('/category', async (ctx) => {
-  const [err, data] = await CategoryController.list(ctx.query);
+router.post('/all', async (ctx) => {
+  const [err, data] = await CategoryController.list(ctx.request.body);
   if (!err) {
     // 返回结果
     ctx.response.status = 200;
@@ -98,13 +99,13 @@ router.get('/category', async (ctx) => {
 /**
  * 获取分类详情
  */
-router.get('/category/:id', async (ctx) => {
+router.post('/detail', async (ctx) => {
 
   // 通过验证器校验参数是否通过
   const v = await new PositiveIdParamsValidator().validate(ctx);
 
   // 获取参数
-  const id = v.get('path.id');
+  const id = v.get('body.id');
   // 获取分类
   const [err, data] = await CategoryController.detail(id);
   if (!err) {
