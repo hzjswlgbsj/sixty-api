@@ -1,7 +1,7 @@
 const { Op } = require('sequelize')
 const { Category } = require('../models/category')
 
-class CategoryController {
+class CategoryDao {
   // 创建分类
   static async create(params = {}) {
     const {
@@ -155,5 +155,5 @@ class CategoryController {
 }
 
 module.exports = {
-  CategoryController
+  CategoryDao
 }

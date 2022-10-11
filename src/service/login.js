@@ -1,5 +1,5 @@
-const { AdminController } = require('../controller/admin')
-const { UserController } = require('../controller/user')
+const { AdminDao } = require('../dao/admin')
+const { UserDao } = require('../dao/user')
 const { generateToken } = require('../../core/util')
 const { Auth } = require('../../middlewares/auth')
 
@@ -9,7 +9,7 @@ class LoginManager {
   static async adminLogin(params) {
     const { email, password } = params
     // 验证账号密码是否正确
-    const [err, admin] = await AdminController.verify(email, password);
+    const [err, admin] = await AdminDao.verify(email, password);
     if (!err) {
       return [null, generateToken(admin.id, Auth.ADMIN)]
     } else {
@@ -21,7 +21,7 @@ class LoginManager {
   static async userLogin(params) {
     const { email, password } = params
     // 验证账号密码是否正确
-    const [err, user] = await UserController.verify(email, password);
+    const [err, user] = await UserDao.verify(email, password);
     if (!err) {
       return [null, generateToken(user.id, Auth.USER), user.id]
     } else {

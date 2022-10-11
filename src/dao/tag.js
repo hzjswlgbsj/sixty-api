@@ -1,7 +1,7 @@
 const { Op } = require('sequelize')
 const { Tag } = require('../models/tag')
 
-class TagController {
+class TagDao {
   // 创建标签
   static async create(params = {}) {
     const {
@@ -149,5 +149,5 @@ class TagController {
 }
 
 module.exports = {
-  TagController
+  TagDao
 }

@@ -5,7 +5,7 @@ const {
   PositiveIdParamsValidator
 } = require('../../validators/tag');
 
-const { TagController } = require('../../controller/tag');
+const { TagDao } = require('../../dao/tag');
 const { Auth } = require('../../../middlewares/auth');
 
 const { Resolve } = require('../../lib/helper');
@@ -23,7 +23,7 @@ const router = new Router({
 router.post('/add', new Auth(AUTH_ADMIN).m, async (ctx) => {
   // 通过验证器校验参数是否通过
   const v = await new TagValidator().validate(ctx);
-  const [err, data] = await TagController.create({
+  const [err, data] = await TagDao.create({
     name: v.get('body.name'),
     status: v.get('status'),
     sort_order: v.get('sort_order'),
@@ -51,7 +51,7 @@ router.post('/delete', new Auth(AUTH_ADMIN).m, async (ctx) => {
   // 获取标签ID参数
   const id = v.get('body.id');
   // 删除标签
-  const [err, data] = await TagController.delete(id);
+  const [err, data] = await TagDao.delete(id);
   if (!err) {
     ctx.response.status = 200;
     ctx.body = res.success('删除标签成功');
@@ -72,7 +72,7 @@ router.post('/update', new Auth(AUTH_ADMIN).m, async (ctx) => {
   // 获取标签ID参数
   const id = v.get('body.id');
   // 更新标签
-  const [err, data] = await TagController.update(id, v);
+  const [err, data] = await TagDao.update(id, v);
   if (!err) {
     ctx.response.status = 200;
     ctx.body = res.success('更新标签成功');
@@ -86,7 +86,7 @@ router.post('/update', new Auth(AUTH_ADMIN).m, async (ctx) => {
  */
 router.post('/all', async (ctx) => {
   // 没有缓存，则读取数据库
-  const [err, data] = await TagController.list(ctx.request.body);
+  const [err, data] = await TagDao.list(ctx.request.body);
   if (!err) {
     ctx.response.status = 200;
     ctx.body = res.json(data)
@@ -105,7 +105,7 @@ router.post('/detail', async (ctx) => {
   // 获取参数
   const id = v.get('body.id');
   // 获取标签
-  const [err, data] = await TagController.detail(id);
+  const [err, data] = await TagDao.detail(id);
   if (!err) {
     // 返回结果
     ctx.response.status = 200;

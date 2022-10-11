@@ -1,7 +1,7 @@
 const { Admin } = require('../models/admin')
 const bcrypt = require('bcryptjs')
 
-class AdminController {
+class AdminDao {
   // 创建用管理员
   static async create(params) {
     const { email, password, nickname } = params
@@ -87,5 +87,5 @@ class AdminController {
 }
 
 module.exports = {
-  AdminController
+  AdminDao
 }

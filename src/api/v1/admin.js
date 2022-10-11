@@ -5,7 +5,7 @@ const {
   AdminLoginValidator
 } = require('../../validators/admin')
 
-const { AdminController } = require('../../controller/admin');
+const { AdminDao } = require('../../dao/admin');
 const { Auth } = require('../../../middlewares/auth');
 const { LoginManager } = require('../../service/login');
 const { Resolve } = require('../../lib/helper');
@@ -23,7 +23,7 @@ router.post('/register', async (ctx) => {
   const v = await new RegisterValidator().validate(ctx);
 
   // 创建管理员
-  const [err, data] = await AdminController.create({
+  const [err, data] = await AdminDao.create({
     email: v.get('body.email'),
     password: v.get('body.password2'),
     nickname: v.get('body.nickname')
@@ -62,7 +62,7 @@ router.get('/auth', new Auth(AUTH_ADMIN).m, async (ctx) => {
   const id = ctx.auth.uid;
 
   // 查询用户信息
-  let [err, data] = await AdminController.detail(id);
+  let [err, data] = await AdminDao.detail(id);
 
   if (!err) {
     // 返回结果

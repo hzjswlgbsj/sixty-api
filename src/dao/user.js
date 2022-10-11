@@ -2,7 +2,7 @@ const { Op } = require('sequelize')
 const { User } = require('../models/user')
 const bcrypt = require('bcryptjs')
 
-class UserController {
+class UserDao {
   // 创建用用户
   static async create(params) {
     const { email, password, username } = params
@@ -182,5 +182,5 @@ class UserController {
 }
 
 module.exports = {
-  UserController
+  UserDao
 }

@@ -7,7 +7,7 @@ const { Admin } = require('../models/admin')
 const { isArray, unique } = require('../lib/utils')
 
 // 定义文章模型
-class ArticleController {
+class ArticleDao {
 
   // 创建文章
   static async create(v) {
@@ -156,14 +156,14 @@ class ArticleController {
 
       // 处理分类
       const categoryIds = unique(rows.map(item => item.category_id))
-      const [categoryError, dataAndCategory] = await ArticleController._handleCategory(rows, categoryIds)
+      const [categoryError, dataAndCategory] = await ArticleDao._handleCategory(rows, categoryIds)
       if (!categoryError) {
         rows = dataAndCategory
       }
 
       // 处理创建人
       const adminIds = unique(rows.map(item => item.admin_id))
-      const [userError, dataAndAdmin] = await ArticleController._handleAdmin(rows, adminIds)
+      const [userError, dataAndAdmin] = await ArticleDao._handleAdmin(rows, adminIds)
       if (!userError) {
         rows = dataAndAdmin
       }
@@ -334,13 +334,13 @@ class ArticleController {
         where: filter,
       });
 
-      const [categoryError, dataAndCategory] = await ArticleController._handleCategory(article, article.category_id)
+      const [categoryError, dataAndCategory] = await ArticleDao._handleCategory(article, article.category_id)
       if (!categoryError) {
         article = dataAndCategory
       }
 
       // 处理创建人
-      const [userError, dataAndAdmin] = await ArticleController._handleAdmin(article, article.admin_id)
+      const [userError, dataAndAdmin] = await ArticleDao._handleAdmin(article, article.admin_id)
       if (!userError) {
         article = dataAndAdmin
       }
@@ -375,5 +375,5 @@ class ArticleController {
 }
 
 module.exports = {
-  ArticleController
+  ArticleDao
 }

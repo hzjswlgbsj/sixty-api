@@ -5,7 +5,7 @@ const {
   PositiveIdParamsValidator
 } = require('../../validators/category');
 
-const { CategoryController } = require('../../controller/category');
+const { CategoryDao } = require('../../dao/category');
 const { Auth } = require('../../../middlewares/auth');
 
 const { Resolve } = require('../../lib/helper');
@@ -24,7 +24,7 @@ router.post('/add', new Auth(AUTH_ADMIN).m, async (ctx) => {
   // 通过验证器校验参数是否通过
   const v = await new CategoryValidator().validate(ctx);
 
-  const [err, data] = await CategoryController.create({
+  const [err, data] = await CategoryDao.create({
     name: v.get('body.name'),
     status: v.get('body.status'),
     sort_order: v.get('body.sort_order'),
@@ -52,7 +52,7 @@ router.post('/delete', new Auth(AUTH_ADMIN).m, async (ctx) => {
   // 获取分类ID参数
   const id = v.get('body.id');
   // 删除分类
-  const [err, data] = await CategoryController.delete(id);
+  const [err, data] = await CategoryDao.delete(id);
   if (!err) {
     ctx.response.status = 200;
     ctx.body = res.success('删除分类成功');
@@ -73,7 +73,7 @@ router.post('/update', new Auth(AUTH_ADMIN).m, async (ctx) => {
   // 获取分类ID参数
   const id = v.get('body.id');
   // 更新分类
-  const [err, data] = await CategoryController.update(id, v);
+  const [err, data] = await CategoryDao.update(id, v);
   if (!err) {
     ctx.response.status = 200;
     ctx.body = res.success('更新分类成功');
@@ -86,7 +86,7 @@ router.post('/update', new Auth(AUTH_ADMIN).m, async (ctx) => {
  * 获取所有的分类
  */
 router.post('/all', async (ctx) => {
-  const [err, data] = await CategoryController.list(ctx.request.body);
+  const [err, data] = await CategoryDao.list(ctx.request.body);
   if (!err) {
     // 返回结果
     ctx.response.status = 200;
@@ -107,7 +107,7 @@ router.post('/detail', async (ctx) => {
   // 获取参数
   const id = v.get('body.id');
   // 获取分类
-  const [err, data] = await CategoryController.detail(id);
+  const [err, data] = await CategoryDao.detail(id);
   if (!err) {
     // 返回结果
     ctx.response.status = 200;
